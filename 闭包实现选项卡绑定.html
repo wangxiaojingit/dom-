@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>闭包之选项卡绑定</title>
+    <style type="text/css" rel="stylesheet">
+      *{margin:0;padding:0}
+      ul,li,ol{list-style:none;}
+      .main{
+          width:80%;
+          height:500px;
+          margin:0 auto;
+          font-size:14px;
+      }
+      #nav{
+          width:100%;
+          height:30px;
+          display: flex;
+          line-height:30px;
+          
+      }
+      #nav>li{
+          flex:1;
+          border:1px solid #333;
+          background:green;
+          color:#fff;
+         
+          
+      }
+      #nav>li.select{
+          background:gold;
+          color:blue;
+      }
+      #panels{
+          width:100%;
+          height:200px;
+          overflow:hidden;
+          border:1px solid #333;
+      }
+      #panels>div{
+        height:200px;
+        line-height:200px;
+        text-align:center;
+        display:none;
+      }
+      #panels>div.select{
+          display:block
+      }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <ul id="nav">
+            <li class="select">js</li>
+            <li>vue</li>
+            <li>css3</li>
+        </ul>
+        <div id="panels">
+            <div class="select">js</div>
+            <div>vue</div>
+            <div>css3</div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    //选项卡:利用闭包建立不销毁的作用域,保存私有变量
+     var onav=document.getElementById("nav");
+     var olis=onav.getElementsByTagName("li");
+     var opanels=document.getElementById("panels");
+     var odivs=opanels.getElementsByTagName("div");
+
+    // 方法一:
+    //for(var i=0;i<olis.length;i++){
+    //     olis[i].onclick=(function(i){
+    //         return function(){
+    //             changeTab(i)
+    //         }
+    //     })(i)
+    //  }
+   // 方法二:
+    for(var i=0;i<olis.length;i++){
+        (function(i){
+           olis[i].onclick=function(){
+            changeTab(i)
+           }
+        })(i)
+        
+     }
+     function changeTab(n){
+        for(var i=0;i<olis.length;i++){
+            olis[i].className="";
+            odivs[i].className=""
+        }
+        olis[n].className="select"
+        odivs[n].className="select"
+        
+     }
+</script>

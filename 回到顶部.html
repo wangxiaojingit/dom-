@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css" >
+      *{margin:0;padding:0}
+      html,body{width:100%;height:100%;}
+      #main{width:100%;height:3000%;}
+      #but{position:fixed;left:0px;bottom:0px;display:none}
+    </style>
+</head>
+<body>
+    <div id="main"></div>
+    <button id="but">回到顶部</button>
+</body>
+</html>
+<script>
+  window.onscroll=function(){
+      console.log(document.documentElement.scrollTop)
+      if(document.documentElement.scrollTop>200){
+        but.style.display="block"
+      }else{
+        but.style.display="none"
+      }
+  }
+
+ //不想总是写document.documentElement[attr]||document.body[attr],我们简单的封装
+ function doc(attr,val){
+    if(typeof val=="undefined"){
+      //就是取值
+      return document.documentElement[attr]||document.body[attr]
+    }else{
+      //就是赋值 
+      document.documentElement[attr]=val; 
+      document.body[attr]=val;
+    }
+ }
+//点击回到顶部,我们只需让scrollTop=0;即可.但是行为太生硬,我们想来个过渡动画看下面.
+ /*but.onclick=function(){
+     doc("scrollTop",0)
+
+ }*/
+
+//规定每次的步长:10;
+var time=null;
+but.onclick=function(){
+  //点击的时候获取当前的scrollTop值
+  
+   var target=doc("scrollTop");
+   time=window.setInterval(function(){
+      var val= target-=20;
+      if(val<=0){
+        doc("scrollTop",0)
+        clearInterval(time)
+        return;
+      }
+      doc("scrollTop",val)
+   },10)
+  
+
+}
+
+
+</script>

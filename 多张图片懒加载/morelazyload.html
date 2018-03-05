@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css" rel="stylesheet">
+      *{margin:0;padding:0;}
+      #main img{display:block;margin-bottom:100px;border:1px solid #333;}
+    </style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/data.js"></script>
+<script>
+   var omain=document.getElementById("main")
+   var str="";
+   for(var i=0;i<dataAry.length;i++){
+     var cur=dataAry[i].logo
+     str+="<img src='images/default.png' zsrc='"+cur+"'/>"
+   }
+   omain.innerHTML=str;
+   function doc(attr,val){
+     if(typeof val =="undefined"){
+        return document.documentElement[attr]||document.body[attr]
+     }
+     document.documentElement[attr]=val;
+     document.body=attr;
+   }
+   function offset(ele){
+       var p=ele.offsetParent;
+       var l=ele.offsetLeft,t=ele.offsetTop;
+       while(p&&p.tagName.toLowerCase()!="body"){
+           if(navigator.userAgent.indexOf("MSIE 8.0")>0){
+             l=l+p.offsetLeft;
+             t=t+p.offsetTop
+           }else{
+             l=l+p.offsetLeft+p.clientLeft;
+             t=t+p.offsetTop+p.clientTop;
+           }
+          p=p.offsetParent;
+       }
+       return {left:l,top:t}
+   }
+   var imgs=omain.getElementsByTagName("img");
+   function lazy(i){
+    var cur=imgs[i];
+        if(cur.isload){
+          return;
+        }  
+        //先获取当前浏览器底边到文档顶部的偏移量.
+       var scrollTop=doc("scrollTop");
+       var clientH=doc("clientHeight");
+       var lH=scrollTop+clientH;
+         var oimgOffsetTop=offset(cur).top;
+         if(lH>=oimgOffsetTop+cur.offsetHeight){
+           var oimg=new Image();
+           oimg.src=imgs[i].getAttribute("zsrc");
+           oimg.onload=function(){
+               imgs[i].src=imgs[i].getAttribute("zsrc");
+           }
+           imgs[i].isload=true;
+         }
+   }
+   window.onscroll=function(){
+       
+       //再去遍历所有的图片,看图片的底边到文档顶部的偏移量
+       for(var i=0;i<imgs.length;i++){
+            lazy(i);
+       }
+   }
+   window.onscroll()
+</script>

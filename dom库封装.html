@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>事件委托</title>
+    <title>dom</title>
     <style type="text/css">
         body, div {
             margin: 0;
@@ -41,8 +41,8 @@
     </div>
 </div>
 <script type="text/javascript">
-   
-    function previousSibling(ele){
+    var utils={};
+    utils.preSibling=function(ele){
         var p=ele.previousSibling||null;
         if(ele.previousElement){
            return ele.previousElement;
@@ -56,8 +56,19 @@
         return p
         
     }
+    
+    utils.preAllSiblings=function (ele){
+       var p= this.preSibling(ele);
+       var ary=[]
+       while(p){
+           ary.unshift(p);
+           p=this.preSibling(p) ;
+       }
+       return ary;
+    }
+    
 
-    function nextSibling(ele){
+    utils.nextSibling=function (ele){
         var p=ele.nextSibling||null;
         if(ele.nextElementSibling){
            return ele.nextElementSibling;
@@ -73,9 +84,21 @@
         
     }
 
-    
+    utils.nextAllSiblings=function(ele){
+        var p=this.nextSibling(ele);
+        var ary=[]
+        while(p){
+          ary.push(p);
+          p=this.nextSibling(p)
+        }
+        return p;
+    }
 
-    function children(ele){
+    utils.getIndex=function(ele){
+      return utils.preAllSiblings(ele).length;
+    }
+
+    utils.children=function (ele){
        var all=ele.parentNode.childNodes;
        var ary=[]
        for(var i=0;i<all.length;i++){
@@ -86,6 +109,32 @@
        return ary;
     }
 
+    utils.getElementsByClass=function(strclass,context){
+        var cont=context||document;
+       //去掉strclass 的左右空格,并把多个类名华为数组
+       strclass=strclass.replace(/^ +| +$/g,'').split(/ +/g);
+       //获取所有的context的元素
+       var eleslists=cont.getElementsByTagName("*");
+       var ary=[]
+       for(var i=0;i<eleslists.length;i++){
+            var cur=eleslists[i];
+            var clName=cur.className;
+            var tag=true;
+            for(var k=0;k<strclass.length;k++){
+                var curk=strclass[k];
+                var reg=new RegExp("(^| )"+curk+"( +|$)")
+                if(!reg.test(clName)){
+                    tag=false;
+                    break;
+                }
+            }
+            if(tag){
+              ary.push(cur)
+            }
+       }
+       return ary
+
+    }
 </script>
 </body>
 </html>

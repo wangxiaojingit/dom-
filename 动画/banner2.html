@@ -11,6 +11,10 @@
     border:1px solid #333;position:relative;}
     #inner{position:absolute;left:0px;top:0;width:1000px;height:300px;}
     #inner>div{width:200px;height:100%;float:left;}
+    #tips{position:absolute;left:30px;bottom:50px;}
+    #tips>li{width:20px;height:20px;background:white;margin-left:10px;
+    float:left;text-align:center;}
+    #tips>li.current{background:lightseagreen;color:#fff;}
     ul,ol,li{list-style:none;}
 
     </style>
@@ -25,7 +29,7 @@
             <div style="background:red">5</div>
         </div>
         <ul id="tips">
-            <li>1</li>
+            <li class="current">1</li>
             <li>2</li>
             <li>3</li>
             <li>4</li>
@@ -34,14 +38,31 @@
     </div>
 </body>
 </html>
+<script src="animate.js"></script>
+<script src="utils.js"></script>
 <script>
-    var num=0;
- window.setInterval(function(){
-     num++;
-     if(num>4){
-       num=0;
+    //点击哪个li的时候就让那个banner出现在视野里
+    var otips=document.getElementsByTagName("li");
+    var oinner=document.getElementById("inner");
+    for(var i=0;i<otips.length;i++){
+      otips[i].onclick=(function(i){
+        return function(){
+            move(i);
+            select(i)
+        } 
+      })(i)
+    }
+
+     function move(i){
+         var target=-i*200
+         animate(oinner,{"left":target},1000)
      }
-     inner.style.left=-(200*num)+"px";
- },1000)
+     function select(n){
+         console.log(i)
+         for(var i=0;i<otips.length;i++){
+          utils.removeClass(otips.item(i),"current")
+         }
+         utils.addClass(otips.item(n),"current")
+     }
  
 </script>

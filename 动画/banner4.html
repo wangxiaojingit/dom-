@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0}
+    #outer{width:200px;height:300px;margin:200px 300px;
+    border:1px solid #333;position:relative;overflow:hidden;}
+    #inner{position:absolute;left:0px;top:0;
+    width:1200px;height:300px;}
+    #inner>div{width:200px;height:100%;float:left;}
+    #tips{position:absolute;left:30px;bottom:50px;}
+    #tips>li{width:20px;height:20px;background:white;margin-left:10px;
+    float:left;text-align:center;}
+    #tips>li.current{background:lightseagreen;color:#fff;}
+    ul,ol,li{list-style:none;}
+
+    </style>
+</head>
+<body>
+    <div id="outer">
+        <div id="inner">
+            <div style="background:pink">1</div>
+            <div style="background:gold">2</div>
+            <div style="background:blue">3</div>
+            <div style="background:green">4</div>
+            <div style="background:red">5</div>
+            <div style="background:pink">1</div>
+        </div>
+        <ul id="tips">
+            <li class="current">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+    </div>
+</body>
+</html>
+<script src="animate.js"></script>
+<script src="utils.js"></script>
+<script>
+    //点击哪个li的时候就让那个banner出现在视野里
+    var otips=document.getElementsByTagName("li");
+    var oinner=document.getElementById("inner");
+    for(var i=0;i<otips.length;i++){
+      otips[i].onclick=(function(i){
+        return function(){
+            clearInterval(timer)
+            move(i);
+            select(i)
+        } 
+      })(i)
+    }
+
+     function move(i){
+         var target=-i*200
+         animate(oinner,{"left":target},1000)
+     }
+     function select(n){
+         
+         for(var i=0;i<otips.length;i++){
+          utils.removeClass(otips.item(i),"current")
+         }
+         utils.addClass(otips.item(n),"current")
+     }
+     var n=0;
+     var timer=window.setInterval(function(){
+      n++;
+      if(n>5){
+         n=1;
+         oinner.style.left="0px";
+      }
+      select(n)
+      animate(oinner,{left:-n*200},600);
+     },1000)
+
+
+     
+</script>

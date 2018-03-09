@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0}
+    #outer{width:200px;height:300px;margin:200px 300px;
+    border:1px solid #333;position:relative;overflow:hidden;}
+    #inner{position:absolute;left:0px;top:0;width:1200px;height:300px;}
+    #inner>div{width:200px;height:100%;float:left;}
+    ul,ol,li{list-style:none;}
+
+    #tips{width:200px;position:absolute;left:20px;bottom:30px;}
+    #tips>li{width:30px;height:30px;line-height:30px;background:white;text-align:center;
+    float:left;margin-right:5px;} 
+    #tips>li.current{background:green;}
+    </style>
+</head>
+<body>
+    <div id="outer">
+        <div id="inner">
+            <div style="background:pink">1</div>
+            <div style="background:gold">2</div>
+            <div style="background:blue">3</div>
+            <div style="background:green">4</div>
+            <div style="background:red">5</div>
+            <div style="background:pink">1</div>
+        </div>
+        <ul id="tips">
+            <li class="current">1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+    </div>
+</body>
+</html>
+<script src="utils.js"></script>
+<script src="animate.js"></script>
+<script>
+     var oinner=document.getElementById("inner");
+     var lis=document.getElementsByTagName("li");
+     var timer=null;
+     var step=0;
+     
+     function moveR(){
+        step++;
+        if(step>5){
+            //一瞬间让inner回到left=0;
+            oinner.style.left=0;
+            step=1;
+        }
+        animate(oinner,{left:-step*200},600);
+        select()
+     }
+     function select(){
+         var imgkey=step;
+         if(step>=5){
+            imgkey=0;
+         }
+        utils.addClass(lis[imgkey],"current");
+        var siblings=utils.siblings(lis[imgkey])
+        for(var i=0;i<siblings.length;i++){
+           utils.removeClass(siblings[i],"current");
+        }
+     }
+
+     for(var i=0;i<lis.length;i++){
+         lis[i].index=i;
+         lis[i].onclick=function(){
+             clearInterval(timer);
+             step=this.index;
+             select();
+             animate(oinner,{left:-step*200},600);
+             timer=window.setInterval(moveR,2000);
+         }
+
+     }
+     
+     var timer=window.setInterval(moveR,2000)
+</script>

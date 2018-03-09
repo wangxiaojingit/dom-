@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+     *{margin:0;padding:0;}
+     #obox{width:100px;height:100px;background:green;
+     position:absolute;left:150px;top:0px;opacity:0.1;}
+    </style>
+</head>
+<body>
+    <div id="obox"></div>
+</body>
+</html>
+<script src="utils.js"></script>
+<script>
+   var obox=document.getElementById("obox");
+   // 封装淡入淡出动画
+
+
+
+obox.onclick=function(){
+    fadeInOut(obox,1,1000)
+    
+}
+function fadeInOut(ele,target,duration){
+    
+   var start=utils.getCss(ele,"opacity");
+   var change=target-start;
+   var interval=10;
+   var time=0;
+   function _move(){
+      time+=interval;
+      if(time<duration){
+        ele.style.opacity=time/duration*change+start;
+      }else{
+        ele.style.opacity=duration;
+        clearInterval(timer);
+        return
+      }
+      
+   }
+   var timer=window.setInterval(_move,interval)
+}
+function animate(ele,attr,duration,target,callback){
+    var _this=ele;
+    var start=parseInt(utils.getCss(ele,attr));//起始位置
+    var change=target-start;
+    var interval=10;
+    var timer=null;
+    var time=0;
+    function _move(){
+       time+=interval;
+       if(time<duration){
+        _this.style[attr]=time/duration*change+start+"px"
+       }else{
+        _this.style[attr]=target+"px";
+        clearInterval(timer);
+        callback();
+       }
+       
+    }
+    timer=window.setInterval(_move,interval)
+
+}
+
+
+
+
+
+
+
+
+
+
+    
+</script>

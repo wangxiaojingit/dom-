@@ -122,3 +122,41 @@ utils.getElementsByClassName=function(strName,context){
     }
     return {left:l,top:t}
   }
+
+  utils.getCss=(function(){
+    var flag=window.getComputedStyle;
+    return function(ele,attr){
+      if(flag){
+        return window.getComputedStyle(ele,null)[attr]
+      }
+      return ele.curentStyle[attr];
+    }
+  })()
+  
+  /**
+   * 去掉某个元素的一个类名
+   */
+  utils.removeClass=function(ele, strName){
+    //先获取原有类名,然后化为数组,和要去除的比较
+    var oldClassName=ele.className;
+    var oldNames= oldClassName.replace(/^ +| +$/g,'').split(/ +/g);
+    var flag=false;
+    for(var i=0;i<oldNames.length;i++){
+        if(oldNames[i]==strName){
+          flag=true;
+           oldNames.splice(i,1);
+           break;
+        }
+    }
+    if(!flag){
+      ele.className=oldClassName
+    }else{
+      ele.className=oldNames.join(' ');
+    }
+  }
+
+  utils.addClass=function(ele,strName){
+    var oldClass=ele.className;
+    var newClass=oldClass+" "+strName;
+    ele.className=newClass;
+  }

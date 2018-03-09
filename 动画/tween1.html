@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+     *{margin:0;padding:0;}
+     #obox{width:100px;height:100px;background:green;position:absolute;left:150px;top:0px;}
+    </style>
+</head>
+<body>
+    <div id="obox"></div>
+</body>
+</html>
+<script src="utils.js"></script>
+<script>
+   var obox=document.getElementById("obox");
+   /**
+   * 起始位置:150;
+     目标位置:850;
+     规定完成时间1000ms
+    
+      规定每10ms 走一步
+   */
+    var startS=150;
+    var targetS=850;
+    var duration=1000
+    var interval=10;
+    var change=targetS-startS
+    var step=change/(duration/interval)
+    obox.onclick=function(){
+        var _this=this;
+        Move()
+        function Move(){
+            window.clearTimeout( _this.time)
+            var curstation=parseInt(utils.getCss(_this,"left"));
+            if(curstation+step>targetS){
+                _this.style.left=targetS+"px";
+                _this.style.background="gold";
+                return;
+            }
+            _this.style.left=curstation+step+"px";
+            _this.time=window.setTimeout(Move,interval)
+        }
+        
+    }
+</script>
